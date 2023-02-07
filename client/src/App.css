@@ -1,0 +1,31 @@
+.join{
+    display:flex;
+    flex-direction: row;
+    height:100vh;
+    width:100%;
+    gap:2%;
+}
+.nav{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap:8%;
+    height: 100%;
+    width:20% ;
+    background-color: rgba(4, 4, 6, 0.824);
+}
+
+.roomid{
+    width:80%;
+}
+
+.bg{
+    height: 100%;
+    width: 80%;
+    overflow: hidden;
+    background-color: rgba(4, 4, 6, 0.824);
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
