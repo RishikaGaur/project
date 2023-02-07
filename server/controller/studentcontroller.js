@@ -1,6 +1,7 @@
-const { db } = require("../models/student");
-const Student=require("../models/student")
-
+const db = require("../firebase");
+// const Student=require("../models/student")
+const workdb=getDatabase(db);
+const Student=workdb.collection("students")
 //name,roll_no,branch,starting_date
 //name,roll,branch,start
 
@@ -24,7 +25,7 @@ const second=async(req,res)=>{
         // temp.save(callback fn)
         //insert or insert many
         console.log(req.body);
-        const result=await Student.create({
+        const result=await Student.doc().set({
             name:req.body.name,
             roll_no:req.body.roll,
             branch:req.body.branch,
