@@ -1,5 +1,6 @@
-const User=require("../models/user")
 const bcrypt=require("bcrypt")
+const db = require("../firebase");
+const User=db.collection("users")
 
 const salt=10;
 
@@ -8,16 +9,21 @@ const method1=(req,res)=>{
 
 }
 
+//can also use User.doc().set({})
+
 const method2= async(req,res)=>{
     try{
         console.log(req.body)
         await bcrypt.hash(req.body.password,salt)
         .then(async(npass)=>{
-            const output=await User.create({
+            const output=await User.doc(req.body.username).set({
                 firstname:req.body.firstname,
                 lastname:req.body.lastname,
+                gender:req.body.gender,
+                dob:req.body.dob,
+                country:req.body.country,
                 username:req.body.username,
-                password:npass,
+                password:npass
             });
             res.send(output);
         }).catch((err)=>{
@@ -30,25 +36,38 @@ const method2= async(req,res)=>{
     }
 }
 
+
+//doc.id
+//https://firebase.google.com/docs/firestore
+//
+
+
 const method3=async(req,res)=>{
     try{
-        const person=await User.findOne({username:req.body.username});
-        console.log(person);
-        if(person){
-            const correct=await bcrypt.compare(req.body.password,person.password);
-            if(correct){
-                res.send("valid user")
+
+        const temp=await User.doc(req.body.username).get();
+        const result=temp.data()
+            console.log(result)
+            if(result){
+                const correct=await bcrypt.compare(req.body.password,result.password);
+                if(correct){
+                    res.send("valid user")
+                }
+                else{
+                    res.send("wrong password")
+                }
+            }else{
+                res.send("username does not exist")
             }
-            else{
-                res.send("wrong password")
-            }
-        }else{
-            res.send("username does not exist")
-        }
     }catch(err){
         console.log(err);
         res.status(500).send(err);
     }
+
+}
+
+//register,login,update profile using username,
+const method4=async(req,res)=>{
 
 }
 
@@ -59,7 +78,3 @@ module.exports={
     method2,
     method3
 }
-
-
-//packetriot for external api
-//pktriot http 3000

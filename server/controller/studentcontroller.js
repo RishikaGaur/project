@@ -1,13 +1,13 @@
 const db = require("../firebase");
-// const Student=require("../models/student")
-const workdb=getDatabase(db);
-const Student=workdb.collection("students")
-//name,roll_no,branch,starting_date
-//name,roll,branch,start
+const Student=db.collection("students")
 
 const first=async(req,res)=>{
     try{
-        const result=await Student.find();
+        const temp=await Student.get();
+        const result=[];
+        temp.forEach(doc=>{
+            result.push(doc.data())
+        })
         res.send(result)
     }catch(err){
         res.status(500).json({
@@ -19,13 +19,8 @@ const first=async(req,res)=>{
 
 const second=async(req,res)=>{
     try{
-
-        // can also do
-        // const temp=new Student(req.body)
-        // temp.save(callback fn)
-        //insert or insert many
         console.log(req.body);
-        const result=await Student.doc().set({
+        const result=await Student.add({
             name:req.body.name,
             roll_no:req.body.roll,
             branch:req.body.branch,
@@ -43,20 +38,14 @@ const second=async(req,res)=>{
 
 const third=async(req,res)=>{
     try{
-        //findOne then Student.set(req.body) then save
-        //update({_id:id},$set{})
-        await Student.findByIdAndUpdate(req.params.id,{
-            $set:{
+        const result=await Student.doc(req.params.id).update({
             name:req.body.name,
             roll_no:req.body.roll,
             branch:req.body.branch,
             starting_date:req.body.start
-            }
-        }).then(()=>{
-            res.send("record updated")
-        }).catch(()=>{
-            throw err
-        })
+        });
+
+        res.send(result)
     }catch(err){
         res.status(500).json({
             status:"failure",
@@ -67,8 +56,7 @@ const third=async(req,res)=>{
 
 const fourth=async(req,res)=>{
     try{
-        //findOne then remove
-        await Student.findByIdAndDelete(req.params.id)
+        const temp=await Student.doc(req.params.id).delete();
         res.send("This record is deleted")
 
     }catch(err){
@@ -81,8 +69,8 @@ const fourth=async(req,res)=>{
 
 const fifth=async(req,res)=>{
     try{
-        //findOne({_id:req.params.id})
-        const result=await Student.findById(req.params.id);
+        const temp=await Student.doc(req.params.id).get();
+        const result=temp.data()
         res.send(result)
     }catch(err){
         res.status(500).json({
@@ -92,61 +80,10 @@ const fifth=async(req,res)=>{
     }
 }
 
-
-const sixth=async(req,res)=>{
-    try{
-        const result= await Student.aggregate([{ $match:{ branch:"cse"}},
-        {$group:{ _id: '$name', count: { $sum: 1 } }}])
-
-        res.send(result)
-
-    }catch(err){
-        res.json({
-            status:"failure",
-            message:err
-        })
-    }
-}
-
-const seventh=async(req,res)=>{
-    //left outer join
-    try{
-        const result= await Student.aggregate([
-            {
-                $match:{
-                    branch:"cse"
-                }
-            },
-            {
-                $lookup:{
-                    from:"teacher",
-                    localField:"branch",
-                    foreignField:"department",
-                    as:"teacher_details"
-                }
-            }
-        ])
-
-        res.send(result)
-
-    }catch(err){
-        res.json({
-            status:"failure",
-            message:err
-        })
-    }
-}
-
 module.exports={
     first,
     second,
     third,
     fourth,
-    fifth,
-    sixth,
-    seventh
+    fifth
 }
-
-
-//req.query.abc
-//url?abc=5

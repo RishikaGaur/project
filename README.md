@@ -20,4 +20,4 @@
 
 > **3rd Feb-5th Feb:** Project selection on which you want to work
 
-> **6rd Feb-:** Started working on social media with chat project
+> **6rd Feb-17th Feb:** Started working on social media with chat project
