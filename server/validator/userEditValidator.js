@@ -1,6 +1,6 @@
 const {check, validationResult}= require("express-validator");
 
-const validateUser=[
+const editUser=[
 check("firstname")
 .notEmpty()
 .trim(),
@@ -21,16 +21,6 @@ check("country")
 .notEmpty()
 .trim(),
 
-
-check('username')
-.notEmpty()
-.trim()
-.isEmail(),
-
-check('password')
-.isLength({ min: 6 })
-.withMessage("Password must have atleast 6 characters"),
-
 (req,res,next)=>{
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -41,4 +31,4 @@ check('password')
 }
 ];
 
-module.exports= validateUser;
+module.exports= editUser;

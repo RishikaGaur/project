@@ -66,9 +66,36 @@ const method3=async(req,res)=>{
 
 }
 
-//register,login,update profile using username,
+//search with username,crud posts,following and requests
 const method4=async(req,res)=>{
+    try{
+        const result=await User.doc(req.params.id).update({
+            firstname:req.body.firstname,
+            lastname:req.body.lastname,
+            gender:req.body.gender,
+            dob:req.body.dob,
+            country:req.body.country
+        })
+        res.send(result)
+    }catch(err){
+        console.log(err)
+        res.status(500).send(err)
+    }
+}
 
+const method5=async(req,res)=>{
+    try{
+        const result=await User.where("firstname","==",req.params.id).get()
+        const persons=[]
+        result.forEach(doc=>{
+            persons.push(doc.lastname)
+        })
+        res.send(persons)
+
+    }catch(err){
+        console.log(err)
+        res.status(500).send(err)
+    }
 }
 
 
@@ -76,5 +103,7 @@ const method4=async(req,res)=>{
 module.exports={
     method1,
     method2,
-    method3
+    method3,
+    method4,
+    method5
 }
