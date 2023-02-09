@@ -4,9 +4,25 @@ const User=db.collection("users")
 
 const salt=10;
 
-const method1=(req,res)=>{
-    res.send("welcome");
-
+const method1=async(req,res)=>{
+    try{
+        const temp=await User.doc(req.params.id).get();
+        const result=temp.data()
+        const new_result={
+            firstname:result.firstname,
+            lastname:result.lastname,
+            gender:result.gender,
+            dob:result.dob,
+            country:result.country,
+            followers:result.follower_count,
+            following:result.following_count,
+            posts:result.post_count
+        }
+        res.send(new_result)
+    }catch(err){
+        console.log(err)
+        res.status(500).send(err)
+    }
 }
 
 //can also use User.doc().set({})
@@ -20,10 +36,17 @@ const method2= async(req,res)=>{
                 firstname:req.body.firstname,
                 lastname:req.body.lastname,
                 gender:req.body.gender,
-                dob:req.body.dob,
+                dob:new Date(req.body.dob),
                 country:req.body.country,
                 username:req.body.username,
-                password:npass
+                password:npass,
+                following_count:0,
+                follower_count:0,
+                post_count:0,
+                following:[],
+                followers:[],
+                posts:[]
+
             });
             res.send(output);
         }).catch((err)=>{
@@ -47,7 +70,6 @@ const method3=async(req,res)=>{
 
         const temp=await User.doc(req.body.username).get();
         const result=temp.data()
-            console.log(result)
             if(result){
                 const correct=await bcrypt.compare(req.body.password,result.password);
                 if(correct){
@@ -73,7 +95,7 @@ const method4=async(req,res)=>{
             firstname:req.body.firstname,
             lastname:req.body.lastname,
             gender:req.body.gender,
-            dob:req.body.dob,
+            dob:new Date(req.body.dob),
             country:req.body.country
         })
         res.send(result)
@@ -88,8 +110,11 @@ const method5=async(req,res)=>{
         const result=await User.where("firstname","==",req.params.id).get()
         const persons=[]
         result.forEach(doc=>{
-            persons.push(doc.lastname)
+            persons.push({
+            name:doc.data().firstname+" "+doc.data().lastname
+            })
         })
+        
         res.send(persons)
 
     }catch(err){
@@ -98,6 +123,10 @@ const method5=async(req,res)=>{
     }
 }
 
+const method6=async(req,res)=>{
+    req.logout()
+    res.redirect("/")
+}
 
 
 module.exports={
@@ -105,5 +134,6 @@ module.exports={
     method2,
     method3,
     method4,
-    method5
+    method5,
+    method6
 }

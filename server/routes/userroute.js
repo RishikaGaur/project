@@ -9,11 +9,13 @@ userRouter.put("/:id",editUser,userControl.method4)
 
 userRouter.get("/:id",userControl.method5)
 
-userRouter.get("/",userControl.method1)
+userRouter.get("/profile/:id",userControl.method1)
 
-userRouter.put("/register",validateUser,userControl.method2)
+userRouter.post("/register",validateUser,userControl.method2)
 
 userRouter.post("/login",userControl.method3)
+
+userRouter.get("/logout",userControl.method6)
 
 
 module.exports = userRouter;

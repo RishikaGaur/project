@@ -15,7 +15,10 @@ check("gender")
 
 check("dob")
 .notEmpty()
-.trim(),
+.trim()
+.isISO8601()
+.toDate()
+.withMessage("Invalid day received"),
 
 check("country")
 .notEmpty()
