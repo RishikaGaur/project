@@ -1,32 +1,51 @@
 const db = require("../firebase");
-const Posts=db.collection("posts")
+const Requests=db.collection("requests")
+const User=db.collection("users")
+const nodemailer=require("nodemailer")
 
 const first=async(req,res)=>{
-    try{
-        const temp=await Posts.where("username", "==", req.params.id).get();
+    const temp=await Requests.where("status","==","pending").get();
         const result=[];
         temp.forEach(doc=>{
-            result.push(doc.data())
+            result.push({from: doc.data().from._path.segments[1],
+            to: doc.data().to._path.segments[1] })
         })
         res.send(result)
-    }catch(err){
-        res.status(500).json({
-            status:"failure",
-            error_message: err
-        })
-    }
 }
 
 const second=async(req,res)=>{
     try{
-        console.log(req.body);
-        const result=await Posts.add({
-            username:req.body.username,
-            caption:req.body.caption,
-            content:req.body.content
+        const result=await Requests.add({
+            from:User.doc(req.body.from),
+            to:User.doc(req.body.to),
+            status:"pending"
         });
         
-        res.send(result)
+
+        let transport = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+              user: process.env.ACC,
+              pass: process.env.PASS
+            }
+        });
+    
+        let message = {
+            from: process.env.ACC,
+            to: req.body.to,
+            subject: "Friend Request",
+            text: "You got a new friend request"
+        }
+        transport.sendMail(message, (err, info)=>{
+            if (err) {
+              console.log(err)
+            } else {
+              console.log(info);
+            }
+        })
+
+        res.send("email sent")
+        
     }catch(err){
         res.status(500).json({
             status:"failure",
@@ -36,13 +55,27 @@ const second=async(req,res)=>{
 }
 
 const third=async(req,res)=>{
+    //accept using id param
     try{
-        const result=await Posts.doc(req.params.id).update({
-            caption:req.body.caption,
-            content:req.body.content
-        });
 
+        const reqList=await Requests.doc(req.params.id).get()
+        const persons=reqList.data()
+        const from=persons.from._path.segments[1]
+        const to=persons.to._path.segments[1]
+        
+        await User.doc(from).update({
+            following_count:require('firebase-admin').firestore.FieldValue.increment(1),
+            following:require('firebase-admin').firestore.FieldValue.arrayUnion(User.doc(to))
+        })
+        await User.doc(to).update({
+            follower_count:require('firebase-admin').firestore.FieldValue.increment(1),
+            followers:require('firebase-admin').firestore.FieldValue.arrayUnion(User.doc(from))
+        })
+        const result=await Requests.doc(req.params.id).update({
+            status:"accept"
+        })
         res.send(result)
+
     }catch(err){
         res.status(500).json({
             status:"failure",
@@ -53,9 +86,10 @@ const third=async(req,res)=>{
 
 const fourth=async(req,res)=>{
     try{
-        const temp=await Posts.doc(req.params.id).delete();
-        res.send("This record is deleted")
-
+        const result=await Requests.doc(req.params.id).update({
+            status:"reject"
+        })
+        res.send(result)
     }catch(err){
         res.status(500).json({
             status:"failure",
@@ -64,10 +98,39 @@ const fourth=async(req,res)=>{
     }
 }
 
+// something wrong in logic of fifth check tomorrow..........................................................
+
+const fifth=async(req,res)=>{
+    try{
+        await User.doc(req.body.username).update({
+            follower_count:require('firebase-admin').firestore.FieldValue.increment(-1),
+            followers:require('firebase-admin').firestore.FieldValue.arrayRemove(User.doc(req.params.user))
+        })
+
+        await User.doc(req.params.user).update({
+            following_count:require('firebase-admin').firestore.FieldValue.increment(-1),
+            following:require('firebase-admin').firestore.FieldValue.arrayRemove(User.doc(req.body.username))
+        })
+
+        res.send("follower deleted")
+    }catch(err){
+        res.status(500).json({
+            status:"failure",
+            error_message: err
+        })
+    }
+}
+
+const sixth=async(req,res)=>{
+
+}
+
 
 module.exports={
     first,
     second,
     third,
-    fourth
+    fourth,
+    fifth,
+    sixth
 }

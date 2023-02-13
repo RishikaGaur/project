@@ -1,19 +1,18 @@
 const express = require('express');
 const requestRouter  = express.Router();
-const userControl=require("../controller/usercontroller")
-const validateUser=require("../validator/userValidator")
-const editUser=require("../validator/userEditValidator")
+const requestControl=require("../controller/requestcontroller")
 
+requestRouter.put("/accept/:id",requestControl.third)
 
-requestRouter.put("/:id",editUser,userControl.method4)
+requestRouter.put("/reject/:id",requestControl.fourth)
 
-requestRouter.get("/:id",userControl.method5)
+requestRouter.get("/",requestControl.first)
 
-requestRouter.get("/",userControl.method1)
+requestRouter.post("/",requestControl.second)
 
-requestRouter.put("/register",validateUser,userControl.method2)
+//id is email
+requestRouter.put("/removefollower/:user",requestControl.fifth)
 
-requestRouter.post("/login",userControl.method3)
-
+requestRouter.put("/removefollowing/:id",requestControl.sixth)
 
 module.exports = requestRouter;

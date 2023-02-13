@@ -10,6 +10,9 @@ const bodyparser=require("body-parser")
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
 
+const dotenv = require("dotenv");
+dotenv.config()
+
 app.use("/post",postRouter)
 
 app.use("/user",userRouter)
