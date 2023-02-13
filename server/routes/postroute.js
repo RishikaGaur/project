@@ -9,7 +9,7 @@ postRouter.post("/:id",postControl.second)
 
 postRouter.put("/:id",postControl.third)
 
-postRouter.delete("/:id",postControl.fourth)
+postRouter.put("/del/:id",postControl.fourth)
 
 postRouter.get("/",postControl.fifth)
 

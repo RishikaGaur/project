@@ -5,9 +5,22 @@ const User=db.collection("users")
 
 const first=async(req,res)=>{
     try{
-        const temp=await User.doc(req.params.id).get();
-        const result=temp.data().posts;
+        const tem=await User.doc(req.params.id).get();
+        const person=tem.data().posts;
+        const idList=[]
+        person.forEach(ele=>{
+            idList.push(ele._path.segments[1])
+        })
+        
+        console.log(idList)
+
+        const temp=await Posts.where(require('firebase-admin').firestore.FieldPath.documentId(),"in",idList).get();
+        const result=[];
+        temp.forEach(doc=>{
+            result.push(doc.data())
+        })
         res.send(result)
+
     }catch(err){
         res.status(500).json({
             status:"failure",
@@ -57,15 +70,23 @@ const third=async(req,res)=>{
 
 const fourth=async(req,res)=>{
     try{
-        const temp=await Posts.doc(req.params.id).delete();
-
-
-        const update_result= await User.doc(req.params.id).update({
-            post_count:require('firebase-admin').firestore.FieldValue.increment(1),
-            posts:require('firebase-admin').firestore.FieldValue.arrayUnion(Posts.doc(result.id))
+        const postId=req.params.id;
+        console.log(postId)
+        const update_result= await User.where("posts",'array-contains',Posts.doc(postId)).get()
+        const persons=[]
+        update_result.forEach(doc=>{
+            persons.push(doc.data().username)
+        })
+        console.log(persons[0])
+        
+        await User.doc(persons[0]).update({
+            post_count:require('firebase-admin').firestore.FieldValue.increment(-1),
+            posts:require('firebase-admin').firestore.FieldValue.arrayRemove(Posts.doc(postId))
         })
 
-        res.send(update_result)
+        await Posts.doc(postId).delete();
+
+        res.send("post deleted")
 
     }catch(err){
         res.status(500).json({
@@ -77,12 +98,11 @@ const fourth=async(req,res)=>{
 
 const fifth=async(req,res)=>{
     try{
-        const temp=await Posts.get();
+        const temp=await Posts.limit(20).get();
         const result=[];
         temp.forEach(doc=>{
             result.push(doc.data())
         })
-        shuffle(result)
         res.send(result)
 
     }catch(err){

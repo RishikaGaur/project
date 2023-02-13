@@ -13,11 +13,14 @@
       - created api to practice jwt
       - 3 courses given
       - created student schema and its api to perform CRUD, aggregate and many other concept
-      - Tried nodemailer
-      - Started socket.io and made a basic chat application
+      - Tried nodemailer - have to generate 16 digit password for third party access in google
+      - Started socket.io and made a basic working chat application (have not tried rooms yet)
+      - Repo name wbmb
 
 > **2nd Feb:** Evaluation
 
 > **3rd Feb-5th Feb:** Project selection on which you want to work
 
 > **6rd Feb-17th Feb:** Started working on social media with chat project
+      
+      - Repo name project
