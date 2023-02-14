@@ -98,8 +98,10 @@ const fourth=async(req,res)=>{
     }
 }
 
-// something wrong in logic of fifth check tomorrow..........................................................
-
+//used as both remove following and remove follower
+//for remove follower
+//body- to
+//param-from
 const fifth=async(req,res)=>{
     try{
         await User.doc(req.body.username).update({
@@ -121,16 +123,11 @@ const fifth=async(req,res)=>{
     }
 }
 
-const sixth=async(req,res)=>{
-
-}
-
 
 module.exports={
     first,
     second,
     third,
     fourth,
-    fifth,
-    sixth
+    fifth
 }

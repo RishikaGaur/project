@@ -17,5 +17,8 @@ userRouter.post("/login",userControl.method3)
 
 userRouter.get("/logout",userControl.method6)
 
+userRouter.get("/followers/:id",userControl.method7)
+
+userRouter.get("/following/:id",userControl.method8)
 
 module.exports = userRouter;

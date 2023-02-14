@@ -10,9 +10,7 @@ requestRouter.get("/",requestControl.first)
 
 requestRouter.post("/",requestControl.second)
 
-//id is email
-requestRouter.put("/removefollower/:user",requestControl.fifth)
-
-requestRouter.put("/removefollowing/:id",requestControl.sixth)
+//user is email
+requestRouter.put("/remove/:user",requestControl.fifth)
 
 module.exports = requestRouter;

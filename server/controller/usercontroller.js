@@ -128,6 +128,56 @@ const method6=async(req,res)=>{
     res.redirect("/")
 }
 
+const method7=async(req,res)=>{
+    try{
+        const tem=await User.doc(req.params.id).get();
+        const person=tem.data().followers;
+        const idList=[]
+        person.forEach(ele=>{
+            idList.push(ele._path.segments[1])
+        })
+        
+        console.log(idList)
+
+        const temp=await User.where(require('firebase-admin').firestore.FieldPath.documentId(),"in",idList).get();
+        const result=[];
+        temp.forEach(doc=>{
+            result.push({
+                name:doc.data().firstname+" "+doc.data().lastname
+            })
+        })
+        res.send(result)
+    }catch(err){
+        console.log(err)
+        res.status(500).send(err)
+    }
+}
+
+const method8=async(req,res)=>{
+    try{
+        const tem=await User.doc(req.params.id).get();
+        const person=tem.data().following;
+        const idList=[]
+        person.forEach(ele=>{
+            idList.push(ele._path.segments[1])
+        })
+        
+        console.log(idList)
+
+        const temp=await User.where(require('firebase-admin').firestore.FieldPath.documentId(),"in",idList).get();
+        const result=[];
+        temp.forEach(doc=>{
+            result.push({
+                name:doc.data().firstname+" "+doc.data().lastname
+            })
+        })
+        res.send(result)
+    }catch(err){
+        console.log(err)
+        res.status(500).send(err)
+    }
+}
+
 
 module.exports={
     method1,
@@ -135,5 +185,7 @@ module.exports={
     method3,
     method4,
     method5,
-    method6
+    method6,
+    method7,
+    method8
 }
