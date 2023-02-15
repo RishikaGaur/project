@@ -1,0 +1,16 @@
+.register{
+    font-size: 1.2vw;
+    font-weight: bold;
+    color: #f4d8ff;
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    height:97%;
+    gap: 3px;
+    box-shadow: 0px 0px 6px #1e0c26;
+    background: linear-gradient(#1e0c26, #ca33b3);;
+    border-radius: 6%;
+    border-right: #1e0c26 2px solid;
+    align-items: center;
+    justify-content:space-evenly;
+}

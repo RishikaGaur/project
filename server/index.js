@@ -12,6 +12,8 @@ app.use(bodyparser.json());
 
 const dotenv = require("dotenv");
 dotenv.config()
+var cors = require('cors')
+app.use(cors()) 
 
 app.use("/post",postRouter)
 
@@ -19,6 +21,6 @@ app.use("/user",userRouter)
 
 app.use("/request",requestRouter)
 
-app.listen(3000, function(){
-    console.log("App is running on Port 3000");
+app.listen(4000, function(){
+    console.log("App is running on Port 4000");
 });

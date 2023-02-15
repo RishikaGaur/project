@@ -29,7 +29,10 @@ const method1=async(req,res)=>{
 
 const method2= async(req,res)=>{
     try{
+        const checkUser=await User.doc(req.body.username).get()
+        const result=checkUser.data()
         console.log(req.body)
+        if (!result){
         await bcrypt.hash(req.body.password,salt)
         .then(async(npass)=>{
             const output=await User.doc(req.body.username).set({
@@ -52,6 +55,9 @@ const method2= async(req,res)=>{
         }).catch((err)=>{
             console.log(err);
         })
+        }else{
+            res.send("Username already Registered")
+        }
         
     }catch(err){
         console.log(err);
