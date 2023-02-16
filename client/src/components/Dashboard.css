@@ -1,74 +1,34 @@
-
-.container{
+.dashboard{
     display:flex;
     flex-direction: column;
-    justify-content: flex-end;
-    height:80%;
-    width:60%;
-    background-color: rgba(0, 0, 0, 0.529);
+    height:98vh;
+    width:98vw;
+    gap:2%;
+    background-color: #fae9f8;
+    align-items: center;
+    justify-content: center;
 }
-.child{
-    display:flex;
-    flex-direction: column;
-    height: 90%;
-    overflow-y:scroll;
-    color:white;
-}
-.first{
-    align-self: flex-end;
-    margin:20px;
-    background-color: rgba(4, 4, 6, 0.888);
-    padding:8px;
-    border-radius: 5%;
-}
-.second{
-    align-self: flex-start;
-    margin: 20px;
-    background-color: rgba(4, 4, 6, 0.888);
-    padding:8px;
-    border-radius: 5%;
-}
-.ip{
-    display:flex;
+.dashnav{
+    display: flex;
     flex-direction: row;
-    padding: 10px;
-    width:90%;
-    justify-content: space-between;
-    align-self: center;
-    height: 5%;
+    align-items: center;
+    justify-content: space-around;
+    height: 10%;
+    width:98% ;
+    background-color: #882179;
 }
-.msg{
-    width:80%;
 
+.navdisp{
+    height: 80%;
+    width: 98%;
+    background-color: #802272;
+    overflow: auto;
 }
-.send{
-    width:15%;
-    color:rgb(235, 235, 254);
-    box-shadow: 2px 2px 2px 2px azure;
-    font-weight: bolder;
-    font-size:20px;
-    text-align: center;
-    cursor: pointer;
-}
-.RoomId{
-    font-size: small;
-    text-decoration: underline;
-    align-self: center;
-}
-.send:hover{
-    transition-delay: 0.1s;
-    transform:translateY(-5px);
-    box-shadow: 2px 2px 2px 2px rgb(206, 255, 255);
-}
-::-webkit-scrollbar {
-    background: rgba(0, 0, 0, 0.544);
-    border-radius:50px ;
-  }
-  
-::-webkit-scrollbar-thumb {
-    background: azure;
-    border-radius:50px ;
-}
-::-webkit-scrollbar-thumb:hover {
-    background:rgb(206, 255, 255) ; 
+
+.navbtn{
+    height: 2.5vw;
+    font-size: 1.2vw;
+    width: 10%;
+    font-weight: bold;
+    color:#6a1b5e ;
 }

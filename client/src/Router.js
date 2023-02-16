@@ -5,17 +5,13 @@ import Home from "./components/Home"
 import Log from "./components/Log"
 import Register from "./components/Register"
 import Dashboard from './components/Dashboard';
+import Search from "./components/Search"
+import MixPosts from './components/MixPosts'
+import Notification from './components/Notification';
+import Profile from "./components/Profile"
 
 const router=createBrowserRouter([
     {
-      // path:"/",
-      // element:<App/>,
-      // children:[
-      //   {
-      //     path:"/home/:roomId",
-      //     element:<Home/>
-      //   }
-      // ]
       path:"/",
       element:<Log/>
     },
@@ -26,22 +22,24 @@ const router=createBrowserRouter([
     {
       path:"/user/:id",
       element:<Dashboard/>,
-      // children:[
-        // {
-        //   path:"/user",
-        //   element:<Posts/>
-        // },
-        // {
-        //   path:"/profile"
-        //   element:<Profile/>
-        // },
-        // {
-        //   path:"/search"
-        // },
-        // {
-        //   path:"notification"
-        // }
-      // ]
+      children:[
+        {
+          path:"/user/:id",
+          element:<MixPosts/>
+        },
+        {
+          path:"/user/:id/profile",
+          element:<Profile/>
+        },
+        {
+          path:"/user/:id/search",
+          element:<Search/>
+        },
+        {
+          path:"/user/:id/notification",
+          element:<Notification/>
+        }
+      ]
     }
 ])
 
