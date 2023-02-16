@@ -117,6 +117,7 @@ const method5=async(req,res)=>{
         const persons=[]
         result.forEach(doc=>{
             persons.push({
+            id:doc.id,
             name:doc.data().firstname+" "+doc.data().lastname
             })
         })

@@ -20,9 +20,11 @@
   margin-left: 2%;
   margin-bottom: 0.5%;
   color:#793198;
+  flex-wrap: wrap;
 }
 .postcontent{
   font-weight: bold;
   font-size: 1.2vw;
   margin-left: 2%;
+  flex-wrap: wrap;
 }
