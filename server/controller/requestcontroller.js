@@ -1,9 +1,4 @@
-const db = require("../firebase");
-const Requests=db.collection("requests")
-const User=db.collection("users")
-const nodemailer=require("nodemailer")
-
-const first=async(req,res)=>{
+const getPendingRequest=async(req,res)=>{
     const temp=await Requests.where("status","==","pending").get();
         const result=[];
         temp.forEach(doc=>{
@@ -13,7 +8,7 @@ const first=async(req,res)=>{
         res.send(result)
 }
 
-const second=async(req,res)=>{
+const sendRequest=async(req,res)=>{
     try{
         const result=await Requests.add({
             from:User.doc(req.body.from),
@@ -54,7 +49,7 @@ const second=async(req,res)=>{
     }
 }
 
-const third=async(req,res)=>{
+const acceptRequest=async(req,res)=>{
     //accept using id param
     try{
 
@@ -84,7 +79,7 @@ const third=async(req,res)=>{
     }
 }
 
-const fourth=async(req,res)=>{
+const rejectRequest=async(req,res)=>{
     try{
         const result=await Requests.doc(req.params.id).update({
             status:"reject"
@@ -98,11 +93,29 @@ const fourth=async(req,res)=>{
     }
 }
 
-//used as both remove following and remove follower
-//for remove follower
-//body- to
-//param-from
-const fifth=async(req,res)=>{
+
+const removeFollower=async(req,res)=>{
+    try{
+        await User.doc(req.params.user).update({
+            follower_count:require('firebase-admin').firestore.FieldValue.increment(-1),
+            followers:require('firebase-admin').firestore.FieldValue.arrayRemove(User.doc(req.body.username))
+        })
+
+        await User.doc(req.body.username).update({
+            following_count:require('firebase-admin').firestore.FieldValue.increment(-1),
+            following:require('firebase-admin').firestore.FieldValue.arrayRemove(User.doc(req.params.user))
+        })
+
+        res.send("follower deleted")
+    }catch(err){
+        res.status(500).json({
+            status:"failure",
+            error_message: err
+        })
+    }
+}
+
+const removeFollowing=async(req,res)=>{
     try{
         await User.doc(req.body.username).update({
             follower_count:require('firebase-admin').firestore.FieldValue.increment(-1),
@@ -125,9 +138,10 @@ const fifth=async(req,res)=>{
 
 
 module.exports={
-    first,
-    second,
-    third,
-    fourth,
-    fifth
+    getPendingRequest,
+    sendRequest,
+    acceptRequest,
+    rejectRequest,
+    removeFollower,
+    removeFollowing
 }

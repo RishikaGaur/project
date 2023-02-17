@@ -1,12 +1,6 @@
-const bcrypt=require("bcrypt")
-const db = require("../firebase");
-const User=db.collection("users")
-
-const salt=10;
-
-const method1=async(req,res)=>{
+const getUserProfile=async(req,res)=>{
     try{
-        const temp=await User.doc(req.params.id).get();
+        const temp=await User.doc(req.params.username).get();
         const result=temp.data()
         const new_result={
             firstname:result.firstname,
@@ -27,7 +21,7 @@ const method1=async(req,res)=>{
 
 //can also use User.doc().set({})
 
-const method2= async(req,res)=>{
+const registerUser= async(req,res)=>{
     try{
         const checkUser=await User.doc(req.body.username).get()
         const result=checkUser.data()
@@ -71,7 +65,7 @@ const method2= async(req,res)=>{
 //
 
 
-const method3=async(req,res)=>{
+const loginUser=async(req,res)=>{
     try{
 
         const temp=await User.doc(req.body.username).get();
@@ -95,9 +89,9 @@ const method3=async(req,res)=>{
 }
 
 //search with username,crud posts,following and requests
-const method4=async(req,res)=>{
+const editUserProfile=async(req,res)=>{
     try{
-        const result=await User.doc(req.params.id).update({
+        const result=await User.doc(req.params.username).update({
             firstname:req.body.firstname,
             lastname:req.body.lastname,
             gender:req.body.gender,
@@ -111,16 +105,27 @@ const method4=async(req,res)=>{
     }
 }
 
-const method5=async(req,res)=>{
+const searchUser=async(req,res)=>{
     try{
-        const result=await User.where("firstname","==",req.params.id).get()
         const persons=[]
-        result.forEach(doc=>{
+
+        if(req.params.firstname == "@"){
+            const result=await User.get()
+            result.forEach(doc=>{
             persons.push({
             id:doc.id,
             name:doc.data().firstname+" "+doc.data().lastname
             })
-        })
+            })
+        }else{
+            const result=await User.where("firstname","==",req.params.firstname).get()
+            result.forEach(doc=>{
+            persons.push({
+            id:doc.id,
+            name:doc.data().firstname+" "+doc.data().lastname
+            })
+            })
+        }
         
         res.send(persons)
 
@@ -130,26 +135,25 @@ const method5=async(req,res)=>{
     }
 }
 
-const method6=async(req,res)=>{
-    req.logout()
+const logoutUser=async(req,res)=>{
     res.redirect("/")
 }
 
-const method7=async(req,res)=>{
+const getFollowers=async(req,res)=>{
     try{
-        const tem=await User.doc(req.params.id).get();
+        const tem=await User.doc(req.params.username).get();
         const person=tem.data().followers;
         const idList=[]
         person.forEach(ele=>{
             idList.push(ele._path.segments[1])
         })
         
-        console.log(idList)
 
         const temp=await User.where(require('firebase-admin').firestore.FieldPath.documentId(),"in",idList).get();
         const result=[];
         temp.forEach(doc=>{
             result.push({
+                id:doc.id,
                 name:doc.data().firstname+" "+doc.data().lastname
             })
         })
@@ -160,21 +164,21 @@ const method7=async(req,res)=>{
     }
 }
 
-const method8=async(req,res)=>{
+const getFollowing=async(req,res)=>{
     try{
-        const tem=await User.doc(req.params.id).get();
+        const tem=await User.doc(req.params.username).get();
         const person=tem.data().following;
         const idList=[]
         person.forEach(ele=>{
             idList.push(ele._path.segments[1])
         })
         
-        console.log(idList)
 
         const temp=await User.where(require('firebase-admin').firestore.FieldPath.documentId(),"in",idList).get();
         const result=[];
         temp.forEach(doc=>{
             result.push({
+                id:doc.id,
                 name:doc.data().firstname+" "+doc.data().lastname
             })
         })
@@ -187,12 +191,12 @@ const method8=async(req,res)=>{
 
 
 module.exports={
-    method1,
-    method2,
-    method3,
-    method4,
-    method5,
-    method6,
-    method7,
-    method8
+    getUserProfile,
+    registerUser,
+    loginUser,
+    editUserProfile,
+    searchUser,
+    logoutUser,
+    getFollowers,
+    getFollowing
 }

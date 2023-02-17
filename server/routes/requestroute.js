@@ -1,16 +1,18 @@
 const express = require('express');
-const requestRouter  = express.Router();
-const requestControl=require("../controller/requestcontroller")
+const router  = express.Router();
+const { sendRequest, acceptRequest, rejectRequest, getPendingRequest, removeFollower, removeFollowing }=require("../controller/requestcontroller")
 
-requestRouter.put("/accept/:id",requestControl.third)
+router.put("/accept/:id",acceptRequest)
 
-requestRouter.put("/reject/:id",requestControl.fourth)
+router.put("/reject/:id",rejectRequest)
 
-requestRouter.get("/",requestControl.first)
+router.get("/",getPendingRequest)
 
-requestRouter.post("/",requestControl.second)
+router.post("/",sendRequest)
 
-//user is email
-requestRouter.put("/remove/:user",requestControl.fifth)
+//user is self username
+router.put("/removefollower/:user",removeFollower)
 
-module.exports = requestRouter;
+router.put("/removefollowing/:user",removeFollowing)
+
+module.exports = router;

@@ -1,11 +1,10 @@
-import React, { useEffect,useState } from 'react'
-import { Outlet,useNavigate,useParams} from 'react-router-dom'
+import React from 'react'
 
 const Profile = () => {
  
   return (
     <div>
-   sadasdsad
+   User profile
     </div>
   )
 }

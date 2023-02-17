@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react'
+import React from 'react'
 import "./Dashboard.css"
 import { Outlet,useNavigate,useParams} from 'react-router-dom'
 
@@ -12,8 +12,8 @@ const Dashboard = () => {
     <div className='dashnav'>
       <button className='navbtn' onClick={()=>{navigate("/user/"+userId)}}>Home</button>
       <button className='navbtn' onClick={()=>{navigate("/user/"+userId+"/search")}}>Search</button>
-      <button className='navbtn' onClick={()=>{navigate("/")}}>Profile</button>
-      <button className='navbtn' onClick={()=>{navigate("/")}}>Chat</button>
+      <button className='navbtn' onClick={()=>{navigate("/user/"+userId+"/profile")}}>Profile</button>
+      <button className='navbtn' onClick={()=>{navigate("/user/"+userId+"/chat")}}>Chat</button>
       <button className='navbtn' onClick={()=>{navigate("/user/"+userId+"/notification")}}>Notification</button>
       <button className='navbtn' onClick={()=>{navigate("/")}}>Logout</button>
     </div>

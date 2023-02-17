@@ -11,6 +11,16 @@ import Notification from './components/Notification';
 import Profile from "./components/Profile"
 
 const router=createBrowserRouter([
+  // {
+  //   path:"/",
+  //   element:<App/>,
+  //   children:[
+  //     {
+  //       path:"/home/:roomId",
+  //       element:<Home/>
+  //     },
+  //   ]
+  // }
     {
       path:"/",
       element:<Log/>
@@ -38,7 +48,17 @@ const router=createBrowserRouter([
         {
           path:"/user/:id/notification",
           element:<Notification/>
-        }
+        },
+        {
+            path:"/user/:id/chat",
+            element:<App/>,
+            children:[
+              {
+                path:"/user/:id/chat/:roomId",
+                element:<Home/>
+              },
+            ]
+          }
       ]
     }
 ])

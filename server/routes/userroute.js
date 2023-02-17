@@ -1,24 +1,25 @@
 const express = require('express');
-const userRouter  = express.Router();
-const userControl=require("../controller/usercontroller")
+const router  = express.Router();
+const { registerUser, loginUser, logoutUser, getUserProfile, editUserProfile, searchUser, getFollowers, getFollowing }=require("../controller/usercontroller")
 const validateUser=require("../validator/userValidator")
 const editUser=require("../validator/userEditValidator")
 
 
-userRouter.put("/:id",editUser,userControl.method4)
+router.put("/:username",editUser,editUserProfile)
 
-userRouter.get("/:id",userControl.method5)
+//search @ to list all users
+router.get("/:firstname",searchUser)
 
-userRouter.get("/profile/:id",userControl.method1)
+router.get("/profile/:username",getUserProfile)
 
-userRouter.post("/register",validateUser,userControl.method2)
+router.post("/register",validateUser,registerUser)
 
-userRouter.post("/login",userControl.method3)
+router.post("/login",loginUser)
 
-userRouter.get("/logout",userControl.method6)
+router.get("/logout",logoutUser)
 
-userRouter.get("/followers/:id",userControl.method7)
+router.get("/followers/:username",getFollowers)
 
-userRouter.get("/following/:id",userControl.method8)
+router.get("/following/:username",getFollowing)
 
-module.exports = userRouter;
+module.exports = router;
