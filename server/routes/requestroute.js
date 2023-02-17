@@ -1,12 +1,13 @@
 const express = require('express');
 const router  = express.Router();
 const { sendRequest, acceptRequest, rejectRequest, getPendingRequest, removeFollower, removeFollowing }=require("../controller/requestcontroller")
+const checkJwt=require("../jwt middleware/checkjwt")
 
 router.put("/accept/:id",acceptRequest)
 
 router.put("/reject/:id",rejectRequest)
 
-router.get("/",getPendingRequest)
+router.get("/",checkJwt,getPendingRequest)
 
 router.post("/",sendRequest)
 

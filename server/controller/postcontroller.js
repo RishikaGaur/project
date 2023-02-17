@@ -11,9 +11,9 @@ const getUserPost = async (req, res) => {
         const result = [];
         temp.forEach(doc => {
             result.push({
-                id:doc.id,
-                caption:doc.data().caption,
-                content:doc.data().content
+                id: doc.id,
+                caption: doc.data().caption,
+                content: doc.data().content
             })
         })
         res.send(result)
@@ -28,19 +28,15 @@ const getUserPost = async (req, res) => {
 
 const createPost = async (req, res) => {
     try {
-        await Posts.add({
+        const result = await Posts.add({
             caption: req.body.caption,
             content: req.body.content
-        }).then(async (result) => {
-            const update_result = await User.doc(req.params.id).update({
-                post_count: require('firebase-admin').firestore.FieldValue.increment(1),
-                posts: require('firebase-admin').firestore.FieldValue.arrayUnion(Posts.doc(result.id))
-            })
-
-            res.send(update_result)
-        }).catch((err) => {
-            throw err
         })
+        const update_result = await User.doc(req.params.username).update({
+            post_count: require('firebase-admin').firestore.FieldValue.increment(1),
+            posts: require('firebase-admin').firestore.FieldValue.arrayUnion(Posts.doc(result.id))
+        })
+        res.send(update_result)
     } catch (err) {
         res.status(500).json({
             status: "failure",
@@ -76,14 +72,14 @@ const delPost = async (req, res) => {
         })
         console.log(persons[0])
 
-        await User.doc(persons[0]).update({
+        const userPostUpdate=await User.doc(persons[0]).update({
             post_count: require('firebase-admin').firestore.FieldValue.increment(-1),
             posts: require('firebase-admin').firestore.FieldValue.arrayRemove(Posts.doc(postId))
         })
 
-        await Posts.doc(postId).delete();
+        const postDel=await Posts.doc(postId).delete();
 
-        res.send("post deleted")
+        res.send(postDel)
 
     } catch (err) {
         res.status(500).json({
