@@ -4,8 +4,9 @@ import axios from "axios"
 import "./MixPosts.css"
 
 const MixPosts = () => {
-
+  const navigate = useNavigate();
   const [list,setList]=useState([])
+  axios.defaults.headers.common['authorization'] = `Bearer ${localStorage.getItem('LoginToken')}`;
 
   const fetchLlist = async () => {
     await axios
@@ -13,7 +14,7 @@ const MixPosts = () => {
     .then((res) => {
       setList(res.data);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {console.log(err); navigate("/")});
   }
 
   useEffect( () => {

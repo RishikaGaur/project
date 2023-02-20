@@ -86,14 +86,21 @@ const loginUser = async (req, res) => {
                     username:req.body.username,
                     access_token:token
                 });
-                console.log(saveToken)
-                res.send("valid user")
+                console.log(saveToken,token)
+                res.send({
+                    status:"valid user",
+                    token:token
+                })
             }
             else {
-                res.send("wrong password")
+                res.send({
+                    status:"wrong password"
+                })
             }
         } else {
-            res.send("username does not exist")
+            res.send({
+                status:"username does not exist"
+            })
         }
     } catch (err) {
         console.log(err);

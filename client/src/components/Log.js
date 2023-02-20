@@ -25,10 +25,11 @@ export default function Log() {
       await axios.post("http://localhost:4000/user/login", state)
       .then((res)=>{
         console.log(res.data)
-        if(res.data==="valid user"){
+        if(res.data.status==="valid user"){
+          localStorage.setItem('LoginToken', res.data.token);
           navigate("/user/"+state.username)
         }else{
-        alert(res.data)
+        alert(res.data.status)
         }
       })
       .catch((err)=>{
