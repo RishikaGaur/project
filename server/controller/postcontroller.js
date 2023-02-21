@@ -72,12 +72,12 @@ const delPost = async (req, res) => {
         })
         console.log(persons[0])
 
-        const userPostUpdate=await User.doc(persons[0]).update({
+        const userPostUpdate = await User.doc(persons[0]).update({
             post_count: require('firebase-admin').firestore.FieldValue.increment(-1),
             posts: require('firebase-admin').firestore.FieldValue.arrayRemove(Posts.doc(postId))
         })
 
-        const postDel=await Posts.doc(postId).delete();
+        const postDel = await Posts.doc(postId).delete();
 
         res.send(postDel)
 

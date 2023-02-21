@@ -1,12 +1,13 @@
 const nodemailer = require("nodemailer")
 
 const getPendingRequest = async (req, res) => {
-    const temp = await Requests.where("status", "==", "pending").get();
+    const temp = await Requests.where("status", "==", "pending").where("to", "==", User.doc(req.params.username)).get();
     const result = [];
     temp.forEach(doc => {
         result.push({
+            id: doc.id,
             from: doc.data().from._path.segments[1],
-            to: doc.data().to._path.segments[1]
+            // to: doc.data().to._path.segments[1]
         })
     })
     res.send(result)

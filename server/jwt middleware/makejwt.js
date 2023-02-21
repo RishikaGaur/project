@@ -1,17 +1,18 @@
-const jwt=require("jsonwebtoken")
+const jwt = require("jsonwebtoken")
 
-const generateToken=async(username)=>{
-    try{
-        
-        const token=await jwt.sign({username},process.env.JWT_KEY,{expiresIn:1800});
+const generateToken = async (username) => {
+    try {
+
+        const token = await jwt.sign({ username }, process.env.JWT_KEY, { expiresIn: 1800 });
+        console.log("generated")
         return {
-            status:false,
+            status: false,
             token
         }
-    }catch(err){
+    } catch (err) {
         console.log(err);
-        return {status:true}
+        return { status: true }
     }
 }
 
-module.exports= generateToken
+module.exports = generateToken

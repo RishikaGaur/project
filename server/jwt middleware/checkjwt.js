@@ -19,18 +19,19 @@ const checkToken = async (req, res, next) => {
             // console.log(persons)
             if (persons) {
                 if (persons[0].username == payload.username) {
+                    console.log("checked")
                     next()
                 }
             }
         }
-    }catch (error) {
-    // console.log(error)
-    if (error.name == "TokenExpiredError") {
-        return res.send({
-            validity: "Invalid or Expired Token"
-        })
+    } catch (error) {
+        // console.log(error)
+        if (error.name == "TokenExpiredError") {
+            return res.send({
+                validity: "Invalid or Expired Token"
+            })
+        }
     }
-}
 }
 
 module.exports = checkToken;

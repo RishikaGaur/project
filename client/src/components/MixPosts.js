@@ -6,11 +6,12 @@ import "./MixPosts.css"
 const MixPosts = () => {
   const navigate = useNavigate();
   const [list,setList]=useState([])
-  axios.defaults.headers.common['authorization'] = `Bearer ${localStorage.getItem('LoginToken')}`;
 
   const fetchLlist = async () => {
     await axios
-    .get("http://localhost:4000/post")
+    .get("http://localhost:4000/post",{"headers":{
+      authorization:`Bearer ${localStorage.getItem('LoginToken')}`
+    }})
     .then((res) => {
       setList(res.data);
     })

@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt")
 const salt = 10;
-const generateJWT=require("../jwt middleware/makejwt")
+const generateJWT = require("../jwt middleware/makejwt")
 
 const getUserProfile = async (req, res) => {
     try {
@@ -82,24 +82,24 @@ const loginUser = async (req, res) => {
                     res.send("Not able to create access token")
                 }
 
-                const saveToken=await Tokens.doc(req.body.username).set({
-                    username:req.body.username,
-                    access_token:token
+                const saveToken = await Tokens.doc(req.body.username).set({
+                    username: req.body.username,
+                    access_token: token
                 });
-                console.log(saveToken,token)
+                console.log(saveToken, token)
                 res.send({
-                    status:"valid user",
-                    token:token
+                    status: "valid user",
+                    token: token
                 })
             }
             else {
                 res.send({
-                    status:"wrong password"
+                    status: "wrong password"
                 })
             }
         } else {
             res.send({
-                status:"username does not exist"
+                status: "username does not exist"
             })
         }
     } catch (err) {
@@ -157,10 +157,9 @@ const searchUser = async (req, res) => {
 }
 
 const logoutUser = async (req, res) => {
-    try{
-        const tokenDel=await Tokens.doc(req.body.username).delete();
-        res.send(tokenDel)
-    }catch(err){
+    try {
+        res.send("Logout successfully")
+    } catch (err) {
         console.log(err)
         res.status(500).send(err)
     }

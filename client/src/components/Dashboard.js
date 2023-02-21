@@ -9,14 +9,14 @@ const Dashboard = () => {
   // console.log(userId)
   const navigate = useNavigate();
 
-  const state={
-    username: userId
-  }
   const logoutUser=async()=>{
-    await axios.delete("http://localhost:4000/user/logout",state)
+    await axios.post("http://localhost:4000/user/logout",{"headers":{
+      authorization:`Bearer ${localStorage.getItem('LoginToken')}`
+    }})
     .then((res)=>{
         localStorage.removeItem('LoginToken');
         navigate("/")
+        alert(res.data)
     })
     .catch((err)=>{
       console.log(err)
