@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt")
 const salt = 10;
-const generateJWT = require("../jwt middleware/makejwt")
+const uuid=require("uuid")
+
+// const generateJWT = require("../session middleware/generate")
 
 const getUserProfile = async (req, res) => {
     try {
@@ -77,19 +79,19 @@ const loginUser = async (req, res) => {
         if (result) {
             const correct = await bcrypt.compare(req.body.password, result.password);
             if (correct) {
-                const { error, token } = await generateJWT(req.body.username);
-                if (error) {
-                    res.send("Not able to create access token")
-                }
+                req.session.username=req.body.username;
+                // req.session.token=uuid.v4()
+                // const token=req.session.genid
+                // console.log(token)
 
-                const saveToken = await Tokens.doc(req.body.username).set({
-                    username: req.body.username,
-                    access_token: token
-                });
-                console.log(saveToken, token)
+                await Tokens.doc(req.session.username).set({
+                    username:req.session.username,
+                    session_token:req.session.id
+                })
+
                 res.send({
                     status: "valid user",
-                    token: token
+                    token: req.session
                 })
             }
             else {

@@ -1,5 +1,18 @@
 const express = require("express");
 const app = express();
+const cookieParser = require("cookie-parser")
+const session=require("express-session")
+app.use(cookieParser())
+
+app.use(session({
+  secret: 'sessionkey',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+     expires: new Date(Date.now() + (300000)) 
+}  
+}))
+
 
 var cors = require('cors')
 app.use(cors())
@@ -17,7 +30,7 @@ global.db = require("./firebase");
 global.User = db.collection("users")
 global.Requests = db.collection("requests")
 global.Posts = db.collection("posts")
-global.Tokens = db.collection("tokens")
+global.Tokens = db.collection("session_Tokens")
 
 const bodyparser = require("body-parser")
 app.use(bodyparser.urlencoded({ extended: true }));
