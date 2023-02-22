@@ -35,7 +35,7 @@ const Profile = () => {
 
   return (
     <div className='userprofile'>
-    {list.map(c=>{
+    {/* {list.map(c=>{
           const {id,from}=c;
           return(
             <>
@@ -45,7 +45,7 @@ const Profile = () => {
        </div>
             </>
           )
-        })}
+        })} */}
   </div>
   )
 }

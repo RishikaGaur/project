@@ -17,7 +17,6 @@ global.db = require("./firebase");
 global.User = db.collection("users")
 global.Requests = db.collection("requests")
 global.Posts = db.collection("posts")
-global.Tokens = db.collection("tokens")
 
 const bodyparser = require("body-parser")
 app.use(bodyparser.urlencoded({ extended: true }));

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { registerUser, loginUser, logoutUser, getUserProfile, editUserProfile, searchUser, getFollowers, getFollowing } = require("../controller/usercontroller")
+const { registerUser, loginUser, logoutUser, getUserProfile, editUserProfile, searchUser, getFollowers, getFollowing , checkToken} = require("../controller/usercontroller")
 const validateUser = require("../validator/userValidator")
 const editUser = require("../validator/userEditValidator")
 const checkJwt = require("../jwt middleware/checkjwt")
@@ -16,6 +16,8 @@ router.get("/profile/:username", checkJwt, getUserProfile)
 router.post("/register", validateUser, registerUser)
 
 router.post("/login", loginUser)
+
+// router.post("/check", checkToken)
 
 router.post("/logout", checkJwt, logoutUser)
 

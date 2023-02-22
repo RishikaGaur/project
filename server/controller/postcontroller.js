@@ -30,7 +30,11 @@ const createPost = async (req, res) => {
     try {
         const result = await Posts.add({
             caption: req.body.caption,
-            content: req.body.content
+            content: req.body.content,
+            like_count:0,
+            comment_count:0,
+            likes:[],
+            comments:[]
         })
         const update_result = await User.doc(req.params.username).update({
             post_count: require('firebase-admin').firestore.FieldValue.increment(1),
@@ -94,7 +98,13 @@ const getAllPost = async (req, res) => {
         const temp = await Posts.limit(20).get();
         const result = [];
         temp.forEach(doc => {
-            result.push(doc.data())
+            result.push({
+                id:doc.id,
+                caption:doc.data().caption,
+                content:doc.data().content,
+                likes:doc.data().like_count,
+                comments:doc.data().comment_count
+            })
         })
         res.send(result)
 
@@ -107,11 +117,47 @@ const getAllPost = async (req, res) => {
 
 }
 
+const likePost=async(req,res)=>{
+//id as params and user as body
+try{
+    const result= await Posts.doc(req.params.id).update({
+        like_count: require('firebase-admin').firestore.FieldValue.increment(1),
+        likes: require('firebase-admin').firestore.FieldValue.arrayUnion(User.doc(req.body.username))
+    })
+    res.send(result)
+}catch(err){
+    res.status(500).send({
+        status:"failure",
+        message:err
+    })
+}
+
+
+}
+const commentPost=async(req,res)=>{
+    try{
+        const result= await Posts.doc(req.params.id).update({
+            comment_count: require('firebase-admin').firestore.FieldValue.increment(1),
+            comments: require('firebase-admin').firestore.FieldValue.arrayUnion({
+                user:User.doc(req.body.username),
+                section:req.body.section
+            })
+        })
+        res.send(result)
+    }catch(err){
+        res.status(500).send({
+            status:"failure",
+            message:err
+        })
+    }
+}
 
 module.exports = {
     getUserPost,
     createPost,
     updatePost,
     delPost,
-    getAllPost
+    getAllPost,
+    likePost,
+    commentPost
 }

@@ -2,7 +2,6 @@ import React from 'react'
 import './Log.css'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
-// import { useAuthContext } from '../../AuthContext';
 import axios from 'axios';
 
 export default function Log() {

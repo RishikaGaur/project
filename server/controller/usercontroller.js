@@ -82,11 +82,11 @@ const loginUser = async (req, res) => {
                     res.send("Not able to create access token")
                 }
 
-                const saveToken = await Tokens.doc(req.body.username).set({
-                    username: req.body.username,
-                    access_token: token
-                });
-                console.log(saveToken, token)
+                // const saveToken = await Tokens.doc(req.body.username).set({
+                //     username: req.body.username,
+                //     access_token: token
+                // });
+                // console.log(saveToken, token)
                 res.send({
                     status: "valid user",
                     token: token
@@ -215,6 +215,22 @@ const getFollowing = async (req, res) => {
     }
 }
 
+const checkToken = async (req, res) => {
+    try {
+        const token = req.headers.authorization.split(' ')[1];
+
+        const payload = await jwt.verify(token, process.env.JWT_KEY)
+        if (payload) {
+            res.send(payload.username)
+        }
+    } catch (error) {
+        if (error.name == "TokenExpiredError") {
+            res.send({
+                validity: "Invalid or Expired Token"
+            })
+        }
+    }
+}
 
 module.exports = {
     getUserProfile,
@@ -224,5 +240,6 @@ module.exports = {
     searchUser,
     logoutUser,
     getFollowers,
-    getFollowing
+    getFollowing,
+    checkToken
 }

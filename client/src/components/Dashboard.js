@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import "./Dashboard.css"
 import { Outlet,useNavigate,useParams} from 'react-router-dom'
 import axios from 'axios';
@@ -10,19 +10,37 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   const logoutUser=async()=>{
-    await axios.post("http://localhost:4000/user/logout",{"headers":{
-      authorization:`Bearer ${localStorage.getItem('LoginToken')}`
+    await axios.post("http://localhost:4000/user/logout/",{"headers":{
+      Authorization:`Bearer ${localStorage.getItem('LoginToken')}`
     }})
     .then((res)=>{
         localStorage.removeItem('LoginToken');
         navigate("/")
-        alert(res.data)
+        console.log(res.data)
     })
     .catch((err)=>{
       console.log(err)
       alert(err)
     })
   }
+  // const urlDirect=async()=>{
+  //   await axios.post("http://localhost:4000/user/check",{"headers":{
+  //     Authorization:`Bearer ${localStorage.getItem('LoginToken')}`
+  //   }})
+  //   .then((res)=>{
+  //       alert(res.data)
+  //   })
+  //   .catch((err)=>{
+  //     console.log(err)
+  //     navigate("/")
+  //     alert(err)
+  //   })
+  // }
+
+  // useEffect(()=>{
+  //   urlDirect()
+  // },[])
+
 
   return (
     <div className='dashboard'>
